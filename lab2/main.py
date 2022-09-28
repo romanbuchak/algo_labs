@@ -7,6 +7,7 @@ def readMatrixFromFile(fileName: str):
     file.close()
     return Graph
 
+
 def parseLine(line: str):
     arr = []
     elements = line.split()
@@ -18,7 +19,7 @@ def parseLine(line: str):
 Graph = readMatrixFromFile("input.txt")
 
 
-def activateMine():
+def activateMine(Graph):
     amountRows = len(Graph)
     if amountRows > 0:
         amountColumns = len(Graph[0])
@@ -68,7 +69,7 @@ class GraphNode:
         return not (self == other)
 
 
-def BFS(startNode: GraphNode, endNode: GraphNode):  # function for BFS
+def BFS(Graph, startNode: GraphNode, endNode: GraphNode):  # function for BFS
     graphRows = len(Graph)
     if graphRows == 0:
         return -1
@@ -93,22 +94,23 @@ def BFS(startNode: GraphNode, endNode: GraphNode):  # function for BFS
         curPathValue = pathValue[curNode]
         if curNode == endNode:
             return pathValue[curNode]
-        if curCol < graphColumns - 1 and Graph[curRow][curCol + 1] != 0 and ((curCol + 1) not in visited[curRow]):   #right
+        if curCol < graphColumns - 1 and Graph[curRow][curCol + 1] != 0 and (
+                (curCol + 1) not in visited[curRow]):  # right
             newNode = GraphNode(curRow, curCol + 1)
             queue.append(newNode)
             visited[curRow].append(curCol + 1)
             pathValue[newNode] = curPathValue + 1
-        if curRow > 0 and Graph[curRow - 1][curCol] != 0 and (curCol not in visited[curRow - 1]):   #up
+        if curRow > 0 and Graph[curRow - 1][curCol] != 0 and (curCol not in visited[curRow - 1]):  # up
             newNode = GraphNode(curRow - 1, curCol)
             queue.append(newNode)
             visited[curRow - 1].append(curCol)
             pathValue[newNode] = curPathValue + 1
-        if curRow < graphRows - 1 and Graph[curRow + 1][curCol] != 0 and (curCol not in visited[curRow + 1]):   #down
+        if curRow < graphRows - 1 and Graph[curRow + 1][curCol] != 0 and (curCol not in visited[curRow + 1]):  # down
             newNode = GraphNode(curRow + 1, curCol)
             queue.append(newNode)
             visited[curRow + 1].append(curCol)
             pathValue[newNode] = curPathValue + 1
-        if curCol > 0 and Graph[curRow][curCol - 1] != 0 and ((curCol - 1) not in visited[curRow]):  #left
+        if curCol > 0 and Graph[curRow][curCol - 1] != 0 and ((curCol - 1) not in visited[curRow]):  # left
             newNode = GraphNode(curRow, curCol - 1)
             queue.append(newNode)
             visited[curRow].append(curCol - 1)
@@ -117,7 +119,8 @@ def BFS(startNode: GraphNode, endNode: GraphNode):  # function for BFS
     return pathValue[endNode] if (endNode.column in visited[endNode.row]) else -1
 
 
-ret = BFS(GraphNode(2, 0), GraphNode(0, 9))
+ret = BFS(activateMine(Graph), GraphNode(2, 0), GraphNode(0, 9))
+print(ret)
 file = open("output.txt", "a")
 file.write(str(ret) + " ")
 file.close()
