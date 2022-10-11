@@ -1,11 +1,11 @@
 def readMatrixFromFile(fileName: str):
     file = open(fileName)
     lines = file.readlines()
-    Graph = []
+    graph = []
     for line in lines:
-        Graph.append(parseLine(line))
+        graph.append(parseLine(line))
     file.close()
-    return Graph
+    return graph
 
 
 def parseLine(line: str):
@@ -19,17 +19,17 @@ def parseLine(line: str):
 Graph = readMatrixFromFile("input.txt")
 
 
-def activateMine(Graph):
-    amountRows = len(Graph)
+def activateMine(graph):
+    amountRows = len(graph)
     if amountRows > 0:
-        amountColumns = len(Graph[0])
+        amountColumns = len(graph[0])
     returnedGraph = []
     for rowIndex in range(amountRows):
-        returnedGraph.append(list(Graph[rowIndex]))
+        returnedGraph.append(list(graph[rowIndex]))
 
     for rowIndex in range(amountRows):
         for elIndex in range(amountColumns):
-            if Graph[rowIndex][elIndex] == 0:
+            if graph[rowIndex][elIndex] == 0:
                 iStart = rowIndex - 1
                 iEnd = rowIndex + 2
                 jStart = elIndex - 1
@@ -69,14 +69,14 @@ class GraphNode:
         return not (self == other)
 
 
-def BFS(Graph, startNode: GraphNode, endNode: GraphNode):  # function for BFS
-    graphRows = len(Graph)
+def BFS(graph, startNode: GraphNode, endNode: GraphNode):  # function for BFS
+    graphRows = len(graph)
     if graphRows == 0:
         return -1
     else:
-        graphColumns = len(Graph[0])
+        graphColumns = len(graph[0])
 
-    if Graph[startNode.getRow()][
+    if graph[startNode.getRow()][
         startNode.column] == 0 or startNode.getRow() > graphRows - 1 or startNode.getColumn() > graphColumns - 1:
         return -1
     visited = dict()
@@ -94,23 +94,22 @@ def BFS(Graph, startNode: GraphNode, endNode: GraphNode):  # function for BFS
         curPathValue = pathValue[curNode]
         if curNode == endNode:
             return pathValue[curNode]
-        if curCol < graphColumns - 1 and Graph[curRow][curCol + 1] != 0 and (
-                (curCol + 1) not in visited[curRow]):  # right
+        if curCol < graphColumns - 1 and graph[curRow][curCol + 1] != 0 and ((curCol + 1) not in visited[curRow]):  # right
             newNode = GraphNode(curRow, curCol + 1)
             queue.append(newNode)
             visited[curRow].append(curCol + 1)
             pathValue[newNode] = curPathValue + 1
-        if curRow > 0 and Graph[curRow - 1][curCol] != 0 and (curCol not in visited[curRow - 1]):  # up
+        if curRow > 0 and graph[curRow - 1][curCol] != 0 and (curCol not in visited[curRow - 1]):  # up
             newNode = GraphNode(curRow - 1, curCol)
             queue.append(newNode)
             visited[curRow - 1].append(curCol)
             pathValue[newNode] = curPathValue + 1
-        if curRow < graphRows - 1 and Graph[curRow + 1][curCol] != 0 and (curCol not in visited[curRow + 1]):  # down
+        if curRow < graphRows - 1 and graph[curRow + 1][curCol] != 0 and (curCol not in visited[curRow + 1]):  # down
             newNode = GraphNode(curRow + 1, curCol)
             queue.append(newNode)
             visited[curRow + 1].append(curCol)
             pathValue[newNode] = curPathValue + 1
-        if curCol > 0 and Graph[curRow][curCol - 1] != 0 and ((curCol - 1) not in visited[curRow]):  # left
+        if curCol > 0 and graph[curRow][curCol - 1] != 0 and ((curCol - 1) not in visited[curRow]):  # left
             newNode = GraphNode(curRow, curCol - 1)
             queue.append(newNode)
             visited[curRow].append(curCol - 1)
