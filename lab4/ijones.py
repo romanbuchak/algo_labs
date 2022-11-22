@@ -38,7 +38,7 @@ def main(IN_FILE='ijones.in', OUT_FILE='ijones.out') -> None:
     with open(IN_FILE, 'r') as in_file:
         in_data = in_file.readlines()
     width, height = map(int, in_data[0].split(' '))
-    corridor = [in_data[line].rstrip('\n') for line in range(1, height + 1)]
+    corridor = [in_data[line] for line in range(1, height + 1)]
     paths_number = get_paths_number(corridor, height, width)
 
     open(OUT_FILE, 'w').write(str(paths_number))
